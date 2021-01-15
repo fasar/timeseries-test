@@ -1,14 +1,42 @@
-# Compiled class file
+# Java Runtime
 *.class
+target/
+!.mvn/wrapper/maven-wrapper.jar
 
-# Log file
-*.log
+### Gradle ###
+java-dbInjectors/.gradle/**
+**/out/**
 
-# BlueJ files
-*.ctxt
+### Visual Code ###
+.vscode/**
+.vscode
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### Eclipse ###
+**/.classpath
+**/.project
+**/.settings
 
 # Package Files #
 *.jar
@@ -21,3 +49,7 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+CassKairWarpScript/cassandra-data/**
+**/node_modules/**

@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+dependencies {
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation 'io.vertx:vertx-core:4.0.0'
+    implementation 'io.vertx:vertx-web-client:4.0.0'
+    implementation 'io.vertx:vertx-pg-client:4.0.0'
+    implementation 'io.vertx:vertx-rx-java2:4.0.0'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+
+    implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.10.0'
+    implementation group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.10.0'
+    implementation group: 'com.datastax.oss', name: 'java-driver-mapper-runtime', version: '4.10.0'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+    testImplementation 'io.vertx:vertx-junit5:4.0.0'
+}

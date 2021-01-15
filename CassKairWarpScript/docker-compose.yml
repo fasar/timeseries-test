@@ -1,0 +1,38 @@
+version: "2"
+
+networks:
+  scms_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
+          ip_range: 10.10.0.0/24
+
+services:
+  cassandra:
+    image: cassandra:3.11.9
+    # environment:
+    #  - JVM_OPTS=-Xms600m -Xmx600m
+    volumes:
+      - ./cassandra-data/:/var/lib/cassandra
+    networks:
+      scms_net:
+        ipv4_address: 10.10.0.101
+  kairosdb:
+    build: Kairosdb
+    environment:
+      - CASSANDRA_HOST_LIST=cassandra
+    depends_on: 
+      - cassandra
+    networks:
+      scms_net:
+        ipv4_address: 10.10.0.102
+
+  warp10-kdb:
+    image: warp10io/warp10:2.7.2-ci
+    container_name: warp10-kdb
+    volumes:
+      - ./w10-data/:/data
+    networks:
+      scms_net:
+        ipv4_address: 10.10.0.103

@@ -1,0 +1,9 @@
+version: "2"
+
+services:
+  timescale:
+    image: timescale/timescaledb:2.0.0-pg12
+    environment: 
+      - TIMESCALEDB_TELEMETRY=off
+      - POSTGRES_PASSWORD=password
+      - POSTGRESQL_USERNAME=user
