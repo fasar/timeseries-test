@@ -6,22 +6,25 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.time.Duration;
 
 import static com.datastax.oss.driver.internal.core.time.Clock.LOG;
 
-public class CreateFileSync {
+public class CreateFileNio {
     public static void main(String[] args) {
         SinFonction sinFonction = new SinFonction(0d, 20d, 0d, Duration.ofHours(12).getSeconds(), 0d);
 
         long start = System.currentTimeMillis();
         int nbSecADay = 24 * 3600;
         int nbElems = 365 * 24 * 60 * 60;
+        File file = new File("S02_data_sync.bin");
         try (
-                FileOutputStream fout = new FileOutputStream("S01_data_sync.bin");
-                BufferedOutputStream bout = new BufferedOutputStream(fout);
-                DataOutputStream dos = new DataOutputStream(bout)
+                FileOutputStream fout = new FileOutputStream(file);
         ) {
+            FileChannel channel = fout.getChannel();
+            ByteBuffer allocate = ByteBuffer.allocate(nbElems *  16);
 
             for (long i = 0; i < nbElems; i++) {
                 if (i % nbSecADay == 0) {
@@ -29,20 +32,20 @@ public class CreateFileSync {
                     LOG.info("I handle the {} day", nbDay);
                 }
                 double sin = sinFonction.sin(i);
-                dos.writeLong(i);
-                dos.writeDouble(sin);
+                allocate.putLong(i);
+                allocate.putDouble(sin);
             }
-            dos.flush();
-            bout.flush();
+            allocate.flip();
+            channel.write(allocate);
+            channel.force(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        File file = new File("S01_data_sync.bin");
+
         long end = System.currentTimeMillis();
         LOG.info("Insertion in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
         LOG.info("File is {} bytes. {} octets / elements", file.length(), "" + (1.0 * file.length() / nbElems ) );
 
     }
-
 }

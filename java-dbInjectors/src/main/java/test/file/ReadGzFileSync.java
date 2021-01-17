@@ -1,26 +1,27 @@
 package test.file;
 
-import test.Math.SinFonction;
-
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.Duration;
+import java.util.zip.GZIPInputStream;
 
 import static com.datastax.oss.driver.internal.core.time.Clock.LOG;
 
-public class ReadFileSync {
+public class ReadGzFileSync {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         int nbSecADay = 24 * 3600;
         int nbElems = 365 * 24 * 60 * 60;
         int nbReaded = 0;
         double add = 0D;
-        File file = new File("S01_data_sync.bin");
+        File file = new File("S01_data_sync.bin.gz");
         try (
                 FileInputStream fin = new FileInputStream(file);
                 BufferedInputStream bin = new BufferedInputStream(fin, nbElems * 16);
-                DataInputStream din = new DataInputStream(bin)
+                GZIPInputStream gin = new GZIPInputStream(bin);
+                DataInputStream din = new DataInputStream(gin)
         ) {
             long length = file.length();
             while (length > 0) {

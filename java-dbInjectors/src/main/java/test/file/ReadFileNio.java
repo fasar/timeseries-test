@@ -1,15 +1,14 @@
 package test.file;
 
-import test.Math.SinFonction;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.time.Duration;
 
 import static com.datastax.oss.driver.internal.core.time.Clock.LOG;
 
-public class ReadFileSync {
+public class ReadFileNio {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         int nbSecADay = 24 * 3600;
@@ -19,20 +18,23 @@ public class ReadFileSync {
         File file = new File("S01_data_sync.bin");
         try (
                 FileInputStream fin = new FileInputStream(file);
-                BufferedInputStream bin = new BufferedInputStream(fin, nbElems * 16);
-                DataInputStream din = new DataInputStream(bin)
         ) {
-            long length = file.length();
-            while (length > 0) {
-                long l = din.readLong();
-                double v = din.readDouble();
+            FileChannel channel = fin.getChannel();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(nbElems * 16);
+
+            channel.read(byteBuffer);
+            byteBuffer.flip();
+            int limit = byteBuffer.limit();
+            while(limit>0)
+            {
+                long l = byteBuffer.getLong();
+                double v = byteBuffer.getDouble();
                 if (l % nbSecADay == 0) {
                     long nbDay = l / nbSecADay;
                     LOG.info("I handle the {} day", nbDay);
                 }
-                nbReaded++;
+                limit-=16;
                 add += v;
-                length -= 16;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +45,6 @@ public class ReadFileSync {
         LOG.info("Readed in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
         LOG.info("Readed {} ts", nbReaded);
         LOG.info("File is {} bytes. {} octets / elements", file.length(), "" + (1.0 * file.length() / nbElems ) );
-
     }
 
 }
