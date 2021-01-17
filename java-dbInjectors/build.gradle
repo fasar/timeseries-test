@@ -24,8 +24,8 @@ dependencies {
     implementation 'io.vertx:vertx-web-client:4.0.0'
     implementation 'io.vertx:vertx-pg-client:4.0.0'
     implementation 'io.vertx:vertx-rx-java2:4.0.0'
+    compile 'com.influxdb:influxdb-client-java:1.8.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
-
     implementation group: 'com.datastax.oss', name: 'java-driver-core', version: '4.10.0'
     implementation group: 'com.datastax.oss', name: 'java-driver-query-builder', version: '4.10.0'
     implementation group: 'com.datastax.oss', name: 'java-driver-mapper-runtime', version: '4.10.0'
