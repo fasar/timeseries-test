@@ -41,8 +41,8 @@ public class ReadGzFileSync {
 
 
         long end = System.currentTimeMillis();
-        LOG.info("Readed in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
-        LOG.info("Readed {} ts", nbReaded);
+        LOG.info("Read in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
+        LOG.info("Read {} ts", nbReaded);
         LOG.info("File is {} bytes. {} octets / elements", file.length(), "" + (1.0 * file.length() / nbElems ) );
 
     }

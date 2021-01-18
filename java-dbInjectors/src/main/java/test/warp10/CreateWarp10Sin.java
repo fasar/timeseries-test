@@ -26,8 +26,9 @@ public class CreateWarp10Sin {
 
         AtomicInteger nb = new AtomicInteger(0);
         int nbSecADay = 24 * 3600;
+        int nbElems = 365 * 24 * 60 * 60;
         Flowable<Buffer> data = Flowable
-                .rangeLong(0L, 365 * 24 * 60 * 60)
+                .rangeLong(0L, nbElems)
                 .doOnNext(i -> {
                     int i1 = nb.incrementAndGet();
                     if (i1 % nbSecADay == 0) {
@@ -52,7 +53,7 @@ public class CreateWarp10Sin {
         long start = System.currentTimeMillis();
         WebClient client = WebClient.create(vertx);
         HttpRequest<Buffer> post = client
-                .post(8080, "10.10.0.103", "/api/v0/update");
+                .post(8080, W10Const.IP, "/api/v0/update");
 
         post
                 .putHeader("X-Warp10-Token", "writeTokenCI")
@@ -79,7 +80,7 @@ public class CreateWarp10Sin {
                         LOG.error("Error with: {}", hr.cause().getMessage());
                     } else {
                         long end = System.currentTimeMillis();
-                        LOG.info("Insertion in {}", Duration.ofMillis(end - start));
+                        LOG.info("Job done in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
                     }
                     client.close();
                     vertx.close();

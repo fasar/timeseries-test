@@ -53,12 +53,12 @@ public class CassandraRead {
             for (Row row1 : execute) {
                 nbReaded++;
                 if (nbReaded % nbSecADay == 0) {
-                    LOG.info("Readed {} day", nbReaded / nbSecADay);
+                    LOG.info("Read {} day", nbReaded / nbSecADay);
                 }
             }
             long end = System.currentTimeMillis();
-            LOG.info("Readed {} elements", nbReaded);
-            LOG.info("Readed in {}", Duration.ofMillis(end - start));
+            LOG.info("Read {} elements", nbReaded);
+            LOG.info("Read in {}", Duration.ofMillis(end - start));
 
         }
     }

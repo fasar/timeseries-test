@@ -14,12 +14,17 @@ public class WriteCounter implements WriteStream<Buffer> {
 
     private Handler<Void> handler;
     private Handler<Throwable> exceptionHandler;
+    private String lastRead = null;
     private long counter;
 
     @Override
     public WriteStream<Buffer> exceptionHandler(Handler<Throwable> handler) {
         this.exceptionHandler = handler;
         return this;
+    }
+
+    public String getLastRead() {
+        return lastRead;
     }
 
     public long getCounter() {
@@ -33,9 +38,13 @@ public class WriteCounter implements WriteStream<Buffer> {
     }
 
     private void onWrite(Buffer data) {
-        String s = data.toString();
-        String[] split = s.split("\n");
-        int nbLines = split.length;
+        lastRead = data.toString();
+        int nbLines = 0;
+        for (int i = 0; i < data.length(); i++) {
+            if (data.getByte(i) == '\n') {
+                nbLines++;
+            }
+        }
         long before = counter % (24 * 3600);
         counter += nbLines;
         long after = counter % (24 * 3600);

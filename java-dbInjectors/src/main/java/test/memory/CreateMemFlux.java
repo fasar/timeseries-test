@@ -42,7 +42,7 @@ public class CreateMemFlux {
 
 
         long end = System.currentTimeMillis();
-        LOG.info("Insertion in {}", Duration.ofMillis(end - start));
+        LOG.info("Insertion in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
         LOG.info("Created {} elements", seed.size());
 
 

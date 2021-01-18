@@ -22,7 +22,7 @@ public class ReadWarp10 {
 
         WebClient client = WebClient.create(vertx);
         HttpRequest<Buffer> get = client
-                .get(8080, "10.10.0.103", "/api/v0/fetch")
+                .get(8080, W10Const.IP, "/api/v0/fetch")
                 .putHeader("X-Warp10-Token", "readTokenCI")
                 .addQueryParam("selector", "sensor{station=S03,signal=VVLD}")
                 .addQueryParam("format", "tsv")
@@ -38,7 +38,8 @@ public class ReadWarp10 {
                     if (hr.succeeded()) {
                         long end = System.currentTimeMillis();
                         LOG.info("Total readed: {} elemtes", writeCounter.getCounter());
-                        LOG.info("Read in {}", Duration.ofMillis(end - start));
+                        long nbElems = writeCounter.getCounter();
+                        LOG.info("Job done in {} = {} elements / seconds", Duration.ofMillis(end - start), "" + (1.0 * nbElems / Duration.ofMillis(end - start).toMillis() * 1000));
                     }
                     client.close();
                     vertx.close();
