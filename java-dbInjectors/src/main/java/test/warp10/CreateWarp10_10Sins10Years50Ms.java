@@ -41,7 +41,7 @@ public class CreateWarp10_10Sins10Years50Ms {
                 .map(i -> {
                     double val = sinFonction.sin(i);
                     long nbUs = i * 1000 * 1000;
-                    String string = String.format("%d// sensor{station=%s,signal=VVLD} %f%n", stationName, nbUs, val);
+                    String string = String.format("%d// sensor{station=%s,signal=VVLD} %f%n", nbUs, stationName, val);
                     return string;
                 })
                 .window(3600)
