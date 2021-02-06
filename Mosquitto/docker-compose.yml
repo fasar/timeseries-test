@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  warp10:
+    image: eclipse-mosquitto:2.0.7
+    container_name: mosquitto
+    volumes:
+      - ./conf:/mosquitto/config 
+      - ./data/data:/mosquitto/data 
+      - ./data/log:/mosquitto/log 
